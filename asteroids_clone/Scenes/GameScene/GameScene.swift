@@ -14,6 +14,8 @@ class GameScene: SKScene {
     var isPlayerAlive = false
     var isRotatingLeft = false
     var isRotatingRight = false
+    var isThrustOn = false
+    var isHyperSpaceOn = false
     
     //Control
     var rotation: CGFloat = 0 {
@@ -25,19 +27,17 @@ class GameScene: SKScene {
     var xVector: CGFloat = 0
     var yVector: CGFloat = 0
     var rotationVector: CGVector = .zero
+    let thrustFactor: CGFloat = 1.0 //bigger number = faster thrust
+    let thrustSound = SKAction.repeatForever(SKAction.playSoundFileNamed("thrust.wav", waitForCompletion: true))
     
     override func didMove(to view: SKView) {
         createPlayer(atX: frame.width / 2, atY: frame.height / 2)
     }
     
     override func update(_ currentTime: TimeInterval) {
-        if isRotatingLeft {
-            rotation += rotationFactor
-            if rotation == 360 { rotation = 0 }
-        } else if isRotatingRight {
-            rotation -= rotationFactor
-            if rotation < 0 { rotation = 360 - rotationFactor }
-        }
+        playerIsRotating()
+        playerIsThrusting()
+        wrapPlayerInFrame()
     }
     
     override func keyDown(with event: NSEvent) {
@@ -49,7 +49,11 @@ class GameScene: SKScene {
             isRotatingLeft = false
             isRotatingRight = true
         case 49:
-            print("Boost")
+            isThrustOn = true
+            player.texture = SKTexture(imageNamed: "ship-moving")
+            scene?.run(thrustSound, withKey: "thrustSound")
+        case 13:
+            animateHyperSpace()
         default:
             break;
         }
@@ -64,7 +68,9 @@ class GameScene: SKScene {
             isRotatingLeft = false
             isRotatingRight = false
         case 49:
-            print("boost released")
+            isThrustOn = false
+            player.texture = SKTexture(imageNamed: "ship-still")
+            scene?.removeAction(forKey: "thrustSound")
         default:
             break
         }
@@ -89,5 +95,44 @@ class GameScene: SKScene {
         player.physicsBody?.mass = 0.2
         player.physicsBody?.allowsRotation = false
         isPlayerAlive = true
+    }
+    
+    func animateHyperSpace() {
+        let outAnimation: SKAction = SKAction(named: "outAnimation")!
+        let inAnimation: SKAction = SKAction(named: "inAnimation")!
+        let randX = CGFloat.random(in: 100...1948)
+        let randY = CGFloat.random(in: 150...1436)
+        let stopShooting = SKAction.run { self.isHyperSpaceOn = true }
+        let startShooting = SKAction.run { self.isHyperSpaceOn = false }
+        let movePlayer = SKAction.move(to: CGPoint(x: randX, y: randY), duration: 0)
+        let wait = SKAction.wait(forDuration: 0.25)
+        let animation = SKAction.sequence([stopShooting, outAnimation, wait, movePlayer, wait, inAnimation, startShooting])
+        player.run(animation)
+    }
+    
+    fileprivate func playerIsRotating() {
+        if isRotatingLeft {
+            rotation += rotationFactor
+            if rotation == 360 { rotation = 0 }
+        } else if isRotatingRight {
+            rotation -= rotationFactor
+            if rotation < 0 { rotation = 360 - rotationFactor }
+        }
+    }
+    
+    fileprivate func playerIsThrusting() {
+        if isThrustOn {
+            xVector = sin(player.zRotation) * -thrustFactor
+            yVector = cos(player.zRotation) * thrustFactor
+            rotationVector = CGVector(dx: xVector, dy: yVector)
+            player.physicsBody?.applyImpulse(rotationVector)
+        }
+    }
+    
+    fileprivate func wrapPlayerInFrame() {
+        if player.position.y > frame.height { player.position.y = 0 }
+        if player.position.y < 0 { player.position.y = frame.height }
+        if player.position.x > frame.width { player.position.x = 0 }
+        if player.position.x < 0 { player.position.x = frame.width }
     }
 }
