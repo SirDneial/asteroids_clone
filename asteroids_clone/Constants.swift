@@ -7,6 +7,9 @@
 
 import Foundation
 
+var thrustFactor: CGFloat = 1.0 //bigger number = faster thrust
+var rotationFactor: CGFloat = 4 //bigger number = faster rotation
+
 func deg2rad(degrees: Double) -> Double {
     degrees * .pi / 180
 }
@@ -23,4 +26,12 @@ func findDestination(start: CGPoint, distance: CGFloat = 1152, angle: CGFloat) -
     x = distance * cos(angleInRadians)
     y = distance * sin(angleInRadians)
     return CGPoint(x: start.x + x, y: start.y + y)
+}
+
+enum CollisionType: UInt32 {
+    case asteroid = 1
+    case enemy = 2
+    case enemyBullet = 4
+    case player = 8
+    case playerBullet = 16
 }
