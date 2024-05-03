@@ -5,9 +5,9 @@ This is a simple Asteroids clone built using Xcode and Swift. It replicates the 
 ## Features
 
 - Spaceship movement using keyboard controls:
-  - `W`: Hyperspace
-  - `A`: Rotate Left
-  - `D`: Rotate Right
+  - `W` or up arrow: Hyperspace
+  - `A` or left arrow: Rotate Left
+  - `D` or right arrow: Rotate Right
   - `Spacebar`: Boost
 
 - Shooting:
