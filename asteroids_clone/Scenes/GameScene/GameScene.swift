@@ -42,17 +42,17 @@ class GameScene: SKScene {
     
     override func keyDown(with event: NSEvent) {
         switch event.keyCode {
-        case 0:
+        case 0, 123:
             isRotatingLeft = true
             isRotatingRight = false
-        case 2:
+        case 2, 124:
             isRotatingLeft = false
             isRotatingRight = true
         case 49:
             isThrustOn = true
             player.texture = SKTexture(imageNamed: "ship-moving")
             scene?.run(thrustSound, withKey: "thrustSound")
-        case 13:
+        case 13, 126:
             animateHyperSpace()
         default:
             break;
@@ -61,10 +61,10 @@ class GameScene: SKScene {
     
     override func keyUp(with event: NSEvent) {
         switch event.keyCode {
-        case 0:
+        case 0, 123:
             isRotatingLeft = false
             isRotatingRight = false
-        case 2:
+        case 2, 124:
             isRotatingLeft = false
             isRotatingRight = false
         case 49:
@@ -77,8 +77,7 @@ class GameScene: SKScene {
     }
     
     override func mouseDown(with event: NSEvent) {
-        let location = event.location(in: self)
-        print("Mouse clicked at \(location)")
+        createPlayerBullet()
     }
     
     func createPlayer(atX: Double, atY: Double) {
@@ -108,6 +107,23 @@ class GameScene: SKScene {
         let wait = SKAction.wait(forDuration: 0.25)
         let animation = SKAction.sequence([stopShooting, outAnimation, wait, movePlayer, wait, inAnimation, startShooting])
         player.run(animation)
+    }
+    
+    func createPlayerBullet() {
+        guard isHyperSpaceOn == false && isPlayerAlive == true else { return }
+        let bullet = SKShapeNode(ellipseOf: CGSize(width: 3, height: 3))
+        let shotSound = SKAction.playSoundFileNamed("fire.wav", waitForCompletion: true)
+        let move = SKAction.move(to: findDestination(start: player.position, angle: rotation), duration: 0.5)
+        let seq = SKAction.sequence([shotSound, move, .removeFromParent()])
+        bullet.position = player.position
+        bullet.zPosition = 0
+        bullet.fillColor = .white
+        bullet.name = "playerBullet"
+        addChild(bullet)
+        bullet.physicsBody = SKPhysicsBody(circleOfRadius: 3)
+        bullet.physicsBody?.affectedByGravity = false
+        bullet.physicsBody?.isDynamic = true
+        bullet.run(seq)
     }
     
     fileprivate func playerIsRotating() {
