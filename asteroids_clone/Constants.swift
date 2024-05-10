@@ -7,8 +7,6 @@
 
 import Foundation
 
-var startingScore = 0
-var startingLives = 3
 var rotationFactor: CGFloat = 4 //bigger number = faster rotation
 
 func deg2rad(degrees: Double) -> Double {
@@ -35,4 +33,11 @@ enum CollisionType: UInt32 {
     case enemyBullet = 4
     case player = 8
     case playerBullet = 16
+}
+
+enum userdefaults {
+    static let score = "score"
+    static let highScore = "highScore"
+    static let lives = "lives"
+    static let level = "level"
 }

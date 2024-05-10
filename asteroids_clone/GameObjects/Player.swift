@@ -21,8 +21,6 @@ class Player: SKSpriteNode {
     private var _isRotatingRight = false
     private var _isThrustOn = false
     private var _isHyperSpaceOn = false
-    var _score = startingScore
-    var _lives = startingLives
     
     func setup() {
         self.position = CGPoint(x: 1024, y: 768)
@@ -125,24 +123,6 @@ class Player: SKSpriteNode {
         }
         set {
             _isHyperSpaceOn = newValue
-        }
-    }
-    
-    var Score: Int {
-        get {
-            return _score
-        }
-        set {
-            _score = newValue
-        }
-    }
-    
-    var Lives: Int {
-        get {
-            return _lives
-        }
-        set {
-            _lives = newValue
         }
     }
 }

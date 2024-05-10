@@ -125,7 +125,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func createEnemy() {
         guard childNode(withName: "enemy") == nil else { return }
-        enemy.setup(score: player.Score)
+        enemy.setup(score: score)
         addChild(enemy)
     }
     
