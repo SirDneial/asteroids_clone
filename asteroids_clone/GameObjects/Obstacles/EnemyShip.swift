@@ -26,6 +26,9 @@ class EnemyShip: SKSpriteNode {
         self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.isDynamic = true
+        self.physicsBody?.categoryBitMask = CollisionType.enemy.rawValue
+        self.physicsBody?.collisionBitMask = CollisionType.player.rawValue | CollisionType.playerBullet.rawValue | CollisionType.asteroid.rawValue
+        self.physicsBody?.contactTestBitMask = CollisionType.player.rawValue | CollisionType.playerBullet.rawValue | CollisionType.asteroid.rawValue
     }
     
     func move() -> Bool {
@@ -46,24 +49,31 @@ class EnemyShip: SKSpriteNode {
     }
     
     func shoot() {
-        let pos = CGPoint(x: self.position.x, y: self.position.y)
+        guard self.isEnemyAlive else { return }
+        
         let bullet = SKShapeNode(ellipseOf: CGSize(width: 3, height: 3))
         let shotSound = SKAction.playSoundFileNamed("fire.wav", waitForCompletion: true)
-        let move = SKAction.move(to: findDestination(start: pos, angle: CGFloat.random(in: 0...360)), duration: 0.5)
+        let move = SKAction.move(to: findDestination(start: self.position, angle: CGFloat.random(in: 0...360)), duration: 0.5)
         let seq = SKAction.sequence([move, .removeFromParent()])
-        bullet.position = pos
+        bullet.position = self.position
         bullet.zPosition = 0
         bullet.fillColor = .white
+        bullet.strokeColor = .red
         bullet.name = "enemyBullet"
         scene!.addChild(bullet)
         bullet.physicsBody = SKPhysicsBody(circleOfRadius: 3)
+        bullet.physicsBody?.categoryBitMask = CollisionType.enemyBullet.rawValue
+        bullet.physicsBody?.collisionBitMask = CollisionType.player.rawValue | CollisionType.asteroid.rawValue
+        bullet.physicsBody?.contactTestBitMask = CollisionType.player.rawValue | CollisionType.asteroid.rawValue
         bullet.run(shotSound)
         bullet.run(seq)
     }
     
-    func validatePosition(height: CGFloat) {
+    func validatePosition(width: CGFloat, height: CGFloat) {
         if self.position.y > height { self.position.y = 0 }
         if self.position.y < 0 { self.position.y = height }
+        if self.position.x > width { self.position.x = 0 }
+        if self.position.x < 0 { self.position.x = width }
     }
     
     var isEnemyAlive: Bool {

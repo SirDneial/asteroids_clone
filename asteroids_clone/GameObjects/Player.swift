@@ -35,11 +35,14 @@ class Player: SKSpriteNode {
         self.physicsBody?.isDynamic = true
         self.physicsBody?.mass = 0.2
         self.physicsBody?.allowsRotation = false
+        self.physicsBody?.categoryBitMask = CollisionType.player.rawValue
+        self.physicsBody?.collisionBitMask = CollisionType.enemyBullet.rawValue | CollisionType.asteroid.rawValue | CollisionType.enemy.rawValue
+        self.physicsBody?.contactTestBitMask = CollisionType.enemyBullet.rawValue | CollisionType.asteroid.rawValue | CollisionType.enemy.rawValue
         self.isPlayerAlive = true
         rotation = 0
     }
     
-    func shoot(rotation: CGFloat) {
+    func shoot(rotation: CGFloat) -> SKShapeNode {
         let pos = CGPoint(x: self.position.x, y: self.position.y)
         let bullet = SKShapeNode(ellipseOf: CGSize(width: 3, height: 3))
         let shotSound = SKAction.playSoundFileNamed("fire.wav", waitForCompletion: true)
@@ -50,7 +53,7 @@ class Player: SKSpriteNode {
         bullet.fillColor = .white
         bullet.name = "playerBullet"
         scene!.addChild(bullet)
-        bullet.physicsBody = SKPhysicsBody(circleOfRadius: 3)        
+        bullet.physicsBody = SKPhysicsBody(circleOfRadius: 3)
         bullet.physicsBody?.categoryBitMask = CollisionType.playerBullet.rawValue
         bullet.physicsBody?.collisionBitMask = CollisionType.asteroid.rawValue | CollisionType.enemy.rawValue
         bullet.physicsBody?.contactTestBitMask = CollisionType.asteroid.rawValue | CollisionType.enemy.rawValue
@@ -58,6 +61,7 @@ class Player: SKSpriteNode {
         bullet.physicsBody?.isDynamic = true
         bullet.run(shotSound)
         bullet.run(seq)
+        return bullet
     }
     
     func move() {
