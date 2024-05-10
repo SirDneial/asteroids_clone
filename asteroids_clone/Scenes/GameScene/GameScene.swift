@@ -10,7 +10,7 @@ import SpriteKit
 class GameScene: SKScene {
     
     //Player
-    let player:Player = Player(imageNamed: "ship-still")
+    let player: Player = Player(imageNamed: "ship-still")
     
     //Enemy SpaceShip
     let enemy: EnemyShip = EnemyShip(imageNamed: "alien-ship")
@@ -19,13 +19,26 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         createPlayer()
-        enemy.enemyTimer = Double.random(in: 1800...7200) // at 60 fps its 300...120 seconds
+        enemy.enemyTimer = Double.random(in: 1800...7200) // at 60 fps its 30...120 seconds
     }
     
     override func update(_ currentTime: TimeInterval) {
         playerIsRotating()
         playerIsThrusting()
         wrapPlayerInFrame()
+        
+        spawnEnemy()
+        if !enemy.isEnemyMoving {
+            enemyMovement()
+        }
+        wrapEnemyInFrame()
+        if enemy.isEnemyAlive {
+            enemy.shootTimer += 1
+            if enemy.shootTimer == 27 {
+                enemy.shoot()
+                enemy.shootTimer = 0
+            }
+        }
     }
     
     override func keyDown(with event: NSEvent) {
@@ -74,6 +87,12 @@ class GameScene: SKScene {
         addChild(player)
     }
     
+    func createEnemy() {
+        guard childNode(withName: "enemy") == nil else { return }
+        enemy.setup(score: player.Score)
+        addChild(enemy)
+    }
+    
     func animateHyperSpace() {
         let tpSound = SKAction.playSoundFileNamed("hyperspace.wav", waitForCompletion: false)
         let outAnimation: SKAction = SKAction(named: "outAnimation")!
@@ -109,5 +128,25 @@ class GameScene: SKScene {
     
     fileprivate func wrapPlayerInFrame() {
         player.validatePosition(width: frame.width, height: frame.height)
+    }
+    
+    fileprivate func spawnEnemy() {
+        if enemy.isEnemyAlive == false {
+            if enemy.enemyTimer < 0 {
+                createEnemy()
+            } else {
+                enemy.enemyTimer -= 1
+            }
+        }
+    }
+    
+    fileprivate func wrapEnemyInFrame() {
+        enemy.validatePosition(height: frame.height)
+    }
+    
+    func enemyMovement() {
+        if enemy.isEnemyAlive {
+            enemy.isEnemyMoving = enemy.move()
+        }
     }
 }

@@ -32,7 +32,6 @@
 		B0F7BD392BE548F700ED774B /* Asteroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F7BD382BE548F700ED774B /* Asteroid.swift */; };
 		B0F7BD3B2BE5490E00ED774B /* EnemyShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F7BD3A2BE5490E00ED774B /* EnemyShip.swift */; };
 		B0F7BD442BE56A0700ED774B /* hyperspace.wav in Resources */ = {isa = PBXBuildFile; fileRef = B0F7BD432BE56A0700ED774B /* hyperspace.wav */; };
-		B0F7BD462BE56FF000ED774B /* GameObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F7BD452BE56FF000ED774B /* GameObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,7 +62,6 @@
 		B0F7BD382BE548F700ED774B /* Asteroid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asteroid.swift; sourceTree = "<group>"; };
 		B0F7BD3A2BE5490E00ED774B /* EnemyShip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyShip.swift; sourceTree = "<group>"; };
 		B0F7BD432BE56A0700ED774B /* hyperspace.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hyperspace.wav; sourceTree = "<group>"; };
-		B0F7BD452BE56FF000ED774B /* GameObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,7 +192,6 @@
 				B0F7BD3C2BE5491E00ED774B /* PowerUps */,
 				B0F7BD352BE5485000ED774B /* Obstacles */,
 				B0F7BD332BE5481400ED774B /* Player.swift */,
-				B0F7BD452BE56FF000ED774B /* GameObject.swift */,
 			);
 			path = GameObjects;
 			sourceTree = "<group>";
@@ -302,7 +299,6 @@
 			files = (
 				B0F7BCF82BDFE6F200ED774B /* ViewController.swift in Sources */,
 				B0F7BCF62BDFE6F200ED774B /* GameScene.swift in Sources */,
-				B0F7BD462BE56FF000ED774B /* GameObject.swift in Sources */,
 				B0F7BCF02BDFE6F200ED774B /* AppDelegate.swift in Sources */,
 				B0F7BD2D2BE2CE1F00ED774B /* OpeningScene.swift in Sources */,
 				B0F7BD392BE548F700ED774B /* Asteroid.swift in Sources */,

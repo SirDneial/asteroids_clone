@@ -7,8 +7,9 @@
 
 import SpriteKit
 
-class Player: SKSpriteNode, GameObject {
+class Player: SKSpriteNode {
     
+    var thrustFactor: CGFloat = 1.0 //bigger number = faster thrust
     var rotation: CGFloat = 0 {
         didSet {
             zRotation = deg2rad(degrees: rotation)
@@ -20,6 +21,8 @@ class Player: SKSpriteNode, GameObject {
     private var _isRotatingRight = false
     private var _isThrustOn = false
     private var _isHyperSpaceOn = false
+    var _score = startingScore
+    var _lives = startingLives
     
     func setup() {
         self.position = CGPoint(x: 1024, y: 768)
@@ -40,7 +43,7 @@ class Player: SKSpriteNode, GameObject {
         let pos = CGPoint(x: self.position.x, y: self.position.y)
         let bullet = SKShapeNode(ellipseOf: CGSize(width: 3, height: 3))
         let shotSound = SKAction.playSoundFileNamed("fire.wav", waitForCompletion: true)
-        let move = SKAction.move(to: findDestination(start: pos, angle: rotation), duration: 0.5)
+        let move = SKAction.move(to: findDestination(start: pos, angle: rotation), duration: 0.75)
         let seq = SKAction.sequence([move, .removeFromParent()])
         bullet.position = pos
         bullet.zPosition = 0
@@ -118,6 +121,24 @@ class Player: SKSpriteNode, GameObject {
         }
         set {
             _isHyperSpaceOn = newValue
+        }
+    }
+    
+    var Score: Int {
+        get {
+            return _score
+        }
+        set {
+            _score = newValue
+        }
+    }
+    
+    var Lives: Int {
+        get {
+            return _lives
+        }
+        set {
+            _lives = newValue
         }
     }
 }

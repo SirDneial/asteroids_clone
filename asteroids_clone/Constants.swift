@@ -7,7 +7,8 @@
 
 import Foundation
 
-var thrustFactor: CGFloat = 1.0 //bigger number = faster thrust
+var startingScore = 0
+var startingLives = 3
 var rotationFactor: CGFloat = 4 //bigger number = faster rotation
 
 func deg2rad(degrees: Double) -> Double {
